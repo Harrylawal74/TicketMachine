@@ -1,3 +1,5 @@
+import sun.security.krb5.internal.Ticket;
+
 public class TicketMachine {
     private final int price;
     private int balance;
@@ -18,28 +20,59 @@ public class TicketMachine {
     }
 
     //Returns the balance left in the machine
-    public int getBalance() {
-        return balance;
+    public void getBalance() {
+        System.out.println("Your balance is £" + balance);
     }
 
     /*
     Receive money from a customer and add to balance.
+    if customer mistypes amount or amount is 0 then outputs message
      */
-    public void insertMoney (int amount) {
-        balance = balance + amount;
+    public void insertMoney (int addamount) {
+        if (addamount > 0) {
+            balance = balance + addamount;
+        }
+        else {
+            System.out.println("Add a positive amount. £"+addamount+" is not positive.");
+        }
     }
 
-    //prints out customers ticket
+    //prints out customers ticket and change remaining
     public void printTicket() {
-        System.out.println("Ticket name");
-        System.out.println("Ticket cost: £" + price);
-        System.out.println("Sorry no change");
-        //Update the total money collected
-        total=total+balance;
+        if (balance >= price){
+            System.out.println("Ticket name");
+            System.out.println("Ticket cost: £" + price);
+            //Update the total money collected
+            total=total+price;
+            balance=balance-price;
+            System.out.println("£"+balance+" Change remaining");
+        }
+        //lets customer know if the balance is too low for the ticket
+        else {
+            System.out.println("You need to add £"+(price-balance));
+        }
+    }
 
-        //Reset balance to zero
-        balance=0;
+    //Refunds balance before ticket purchase
+    public int refundBalance() {
+        int refundamount;
+        refundamount = balance;
+        balance = 0;
+        return refundamount;
+    }
+
+    public static void main(String[] args) {
+        TicketMachine ticket = new TicketMachine(12);
+        ticket.insertMoney(50);
+        ticket.printTicket();
+        ticket.getBalance();
 
     }
+
+
+
 }
+
+
+
 
